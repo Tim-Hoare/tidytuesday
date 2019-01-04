@@ -15,7 +15,7 @@ library(tidyverse)
 tweets <- map_df(list.files("russian-troll-tweets-master/",
            pattern = "IRAhandle_tweets", full.names = TRUE), read_csv)
            
-# Save the object as a .RDS file so we have all the tweets in one file for the future          
+# Save the object as a .RDS file so we have all the tweets in one place for the future          
 saveRDS(tweets, "russian_troll_tweets.RDS")
 ```
 Let's have a look at the data:
