@@ -53,13 +53,3 @@ us_births %>%
   scale_y_continuous(labels = scales::comma_format()) +
   labs(y = "Total Births",
        x = "Date")
-
-
-
-
-
-
-
-
-
-
