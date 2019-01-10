@@ -82,15 +82,3 @@ data %>%
   labs(x = "Year",
        y = "Number of new characters",
        title = "Number of new DC and Marvel comic book characters per year")
-
-
-
-  
-
-
-
-
-
-
-
-
