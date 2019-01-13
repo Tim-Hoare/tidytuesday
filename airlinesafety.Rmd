@@ -1,0 +1,85 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+airline_safety <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-08-07/week19_airline_safety.csv") %>%
+  select(-X1)
+
+theme_set(theme_light())
+```
+
+## What are the airlines in this dataset?
+
+```{r}
+airline_safety %>%
+  count(airline, sort = TRUE)
+```
+
+## Which airlines have had the most incidents, fatalities and fatal accidents?
+
+```{r}
+airline_safety %>%
+  filter(type_of_event == "incidents") %>%
+  group_by(airline) %>%
+  summarise(total_incidents = sum(n_events)) %>%
+  arrange(desc(total_incidents))
+
+airline_safety %>%
+  filter(type_of_event == "fatalities") %>%
+  group_by(airline) %>%
+  summarise(total_fatalities = sum(n_events)) %>%
+  arrange(desc(total_fatalities))
+
+airline_safety %>%
+  filter(type_of_event == "fatal_accidents") %>%
+  group_by(airline) %>%
+  summarise(total_fatal_accidents = sum(n_events)) %>%
+  arrange(desc(total_fatal_accidents))
+
+```
+
+## Have the total number of airline incidents decreased over time?
+
+```{r fig.width=7, fig.height=6}
+airline_safety %>%
+  filter(type_of_event != "fatalities") %>%
+  group_by(airline, year_range) %>%
+  summarise(total_incidents = sum(n_events)) %>%
+  ggplot(aes(factor(year_range, levels = c("85_99", "00_14")), total_incidents, fill = year_range)) +
+  geom_boxplot(show.legend = F) +
+  labs(x = "Year",
+       y = "Total Incidents",
+       title = "Number of airline incidents and fatal accidents between 1985-99 and 2000-14",
+       subtitle = "Significant outlier is Aeroflot, with a total of 90 incidents between 1985 and 1999")
+```
+
+
+```{r}
+airline_safety %>%
+  filter(type_of_event != "fatalities") %>%
+  mutate(events_ASK = n_events * 1000000 / avail_seat_km_per_week) %>%
+  arrange(desc(events_ASK)) %>%
+  head(15) %>%
+  mutate(airline = fct_reorder(airline, events_ASK)) %>%
+  ggplot(aes(x = airline, y = events_ASK, fill = airline)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(x = NULL,
+       y = "Number of events per million kilometres")
+```
+
+
+
+
+
+
