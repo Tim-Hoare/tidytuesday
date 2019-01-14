@@ -75,17 +75,3 @@ launches %>%
   labs(x = "Year",
        y = "Success Rate",
        title = "Has launch success rate improved over time?")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
